@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     handleInput(isChecked) {
-      if (isChecked === 0) {
+      if (isChecked === 0 || isChecked === 1) {
         this.listCopy.forEach((item) => {
           item.isChecked = true;
         });
