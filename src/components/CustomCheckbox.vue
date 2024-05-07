@@ -25,6 +25,7 @@ export default {
 <style scoped>
 .custom-checkbox {
   cursor: pointer;
+  user-select: none;
   display: inline-block;
   width: 20px;
   height: 20px;
