@@ -2,7 +2,9 @@
   <div class="main_box">
     <div class="head">
       <p>{{ arrayName }}</p>
-      <button class="mix_btn" @click="changeSortedFlag()">{{ btnText }}</button>
+      <button class="mix_btn" @click="changeSortedFlag()">
+        {{ btnText }}
+      </button>
     </div>
 
     <div class="square_main" v-if="isSorted">
@@ -21,12 +23,7 @@
     <div class="square_box" v-else>
       <div v-for="(item, index) in shuffledList" :key="index">
         <div
-          @click="
-            ($event) => {
-              removeElement($event);
-              deleteSquare(item.name);
-            }
-          "
+          @click="deleteSquare(item.name)"
           class="square"
           :style="{ backgroundColor: item.color }"
         ></div>
@@ -42,24 +39,11 @@ export default {
   data() {
     return {
       listCopy: [],
-      squares: [],
       isSorted: true,
     };
   },
   methods: {
-    shuffleSquares() {
-      this.squares = [];
-      this.list.forEach((item) => {
-        for (let i = 0; i < item.value; i++) {
-          if (item.isChecked) {
-            this.squares.push({ name: item.name, color: item.color });
-          }
-        }
-      });
-    },
-
     changeSortedFlag() {
-      this.shuffleSquares();
       this.isSorted = !this.isSorted;
     },
 
@@ -69,15 +53,22 @@ export default {
         this.listCopy[index].value -= 1;
       }
     },
-
-    removeElement(event) {
-      event.target.remove();
-    },
   },
   computed: {
     shuffledList() {
-      return this.squares.slice().sort(() => Math.random() - 0.5);
+      let squaresList = [];
+
+      this.listCopy.forEach((item) => {
+        if (item.isChecked) {
+          for (let i = 0; i < item.value; i++) {
+            squaresList.push({ name: item.name, color: item.color });
+          }
+        }
+      });
+      squaresList.sort(() => Math.random() - 0.5);
+      return squaresList;
     },
+
     btnText() {
       return this.isSorted ? "Перемешать" : "Сортировать";
     },
@@ -85,14 +76,10 @@ export default {
   mounted() {
     this.listCopy = [...this.list];
   },
-
-  created() {
-    this.shuffleSquares();
-  },
 };
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .main_box {
   border: 1px solid black;
   padding: 10px;
